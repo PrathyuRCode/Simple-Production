@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="simple_production_table_tree" model="ir.ui.view">
+            <field name="name">simple.production.table.tree</field>
+            <field name="model">simple.production</field>
+            <field name="arch" type="xml">
+                <tree string="channel">
+                    <field name="reference_no"/>
+                    <field name="product_id"/>
+                    <field name="user_id"/>
+                    <field name="request_date"/>
+                    <field name="quantity"/>
+                </tree>
+            </field>
+        </record>
+        <record id="simple_production_table_form" model="ir.ui.view">
+            <field name="name">simple.production.table.form</field>
+            <field name="model">simple.production</field>
+            <field name="arch" type="xml">
+                <form string="channel">
+                    <header>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,in_progress,done,cancel"/>
+                        <button name="button_immediate_confirm" states="draft" string="Confirm" type="object" class="btn btn-primary me-1"/>
+                        <button name="button_immediate_progress" states="confirmed" string="Start" type="object" class="btn btn-primary me-1"/>
+                        <button name="button_immediate_done" states="in_progress" string="Done" type="object" class="btn btn-primary me-1"/>
+                        <button name="button_immediate_cancel" states="draft,confirmed" string="Cancel" type="object"/>
+                    </header>
+                    <sheet>
+                        <div name="button_box" position="inside">
+                            <button name="simple_product_move" type="object" string="Product Moves" class="oe_stat_button" icon="fa-exchange" attrs="{'invisible': [('state', '!=', 'done')]}"/>
+                        </div>
+                        <h1>
+                            <field name="reference_no"/>
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="product_id"/>
+                                <field name="quantity"/>
+                                <field name="bom_id"/>
+                                <field name="order_move_ids" widget="many2many_tags" invisible="True"/>
+                            </group>
+                            <group>
+                                <field name="user_id"/>
+                                <field name="company_id"/>
+                                <field name="request_date"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Components">
+                                <field name="production_line_ids">
+                                    <tree editable="bottom">
+                                        <field name="components_id"/>
+                                        <field name="consumed_qty"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="simple_production_model_action" model="ir.actions.act_window">
+            <field name="name">Simple Production</field>
+            <field name="res_model">simple.production</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+
+    <record id="seq_simple_production" model="ir.sequence">
+        <field name="name">Simple production</field>
+        <field name="code">simple.production</field>
+        <field name="prefix">SP/MO/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+
+    <menuitem id="simple_production_menu_root" name="Simple Production"/>
+    <menuitem id="simple_production_first_level_menu" name="Manufacturing" parent="simple_production_menu_root"
+              action="simple_production_model_action"/>
+    <menuitem id="simple_production_bom_menu" name="Bills of Materials" action="simple_production_bom_model_action" parent="simple_production_menu_root">
+<!--        <menuitem id="simple_production_bom_first_level_menu" name="Prathyu" parent="simple_production_bom_menu"-->
+<!--        action="simple_production_bom_model_action"/>-->
+    </menuitem>
+</odoo>

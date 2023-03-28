@@ -1,0 +1,4 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_simple_production,simple.production,model_simple_production,base.group_user,1,1,1,1
+access_components_order_line,components.order.line,model_components_order_line,base.group_user,1,1,1,1
+access_simple_production_bom,simple.production.bom,model_simple_production_bom,base.group_user,1,1,1,1
